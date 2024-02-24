@@ -4,6 +4,7 @@ class Registro {
   List<double> montos = [];
   List<String> categorias = [];
   List<String> conceptos = [];
+  double saldo = 0;
 
   void mostrarRegistro() {
     bool running = true;
@@ -32,45 +33,40 @@ class Registro {
           stdout.write('Ingrese el concepto del ingreso: ');
           String inputConcepto = stdin.readLineSync() ?? '';
           conceptos.add(inputConcepto);
+
+          saldo += montoIngresado; 
           break;
         case '2':
-          if (montos.isEmpty) {
+          if (saldo <= 0) {
             print('No hay montos ingresados todavía.');
           } else {
-            double total = 0;
-            for (double monto in montos) {
-              total += monto;
-            }
-            print('Total de montos ingresados: \$${total}');
+            print('Saldo actual: \$${saldo}');
           }
-          break; 
- case '3':
-  if (montos.isEmpty) {
-    print('No hay montos ingresados todavía.');
-  } else {
-    stdout.write('Ingrese el monto a retirar: ');
-    String inputRetiro = stdin.readLineSync() ?? '';
-    double montoRetiro = double.tryParse(inputRetiro) ?? 0;
-    if (montoRetiro <= 0) {
-      print('El monto a retirar debe ser mayor que cero.');
-    } else {
-      double total = 0;
-      for (double monto in montos) {
-        total += monto;
-      }
-      if (total >= montoRetiro) {
-        montos.removeLast();
-        // Resto del código
-        total -= montoRetiro; // Restar el monto retirado al total
-        print('Se retiró \$${montoRetiro} correctamente.');
-      } else {
-        print('No hay suficientes fondos para retirar \$${montoRetiro}.');
-      }
-    }
-  }
-  break;
+          break;
+        case '3':
+          if (saldo <= 0) {
+            print('No hay montos ingresados todavía.');
+          } else {
+            stdout.write('Ingrese el monto a retirar: ');
+            String inputRetiro = stdin.readLineSync() ?? '';
+            double montoRetiro = double.tryParse(inputRetiro) ?? 0;
+            if (montoRetiro <= 0) {
+              print('El monto a retirar debe ser mayor que cero.');
+            } else {
+              if (saldo >= montoRetiro) {
+                montos.add(-montoRetiro); 
+                stdout.write('Ingrese el concepto del retiro: ');
+                String inputConceptoRetiro = stdin.readLineSync() ?? '';
+                conceptos.add(inputConceptoRetiro);
 
-
+                saldo -= montoRetiro;
+                print('Se retiró \$${montoRetiro} correctamente. Concepto: $inputConceptoRetiro');
+              } else {
+                print('No hay suficientes fondos para retirar \$${montoRetiro}.');
+              }
+            }
+          }
+          break;
         case '4':
           print('Saliendo del registro de transacciones...');
           running = false;
