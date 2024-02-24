@@ -5,6 +5,8 @@ import '../EstadoFinanciero/Financiero.dart';
 
 void main() {
   bool running = true;
+  Registro registro = Registro();
+  
 
   while (running) {
     print('Bienvenido al Sistema de Cálculo Financiero:');
@@ -18,7 +20,7 @@ void main() {
     switch (input) {
       case '1':
         print('Ha seleccionado la opción 1: Registro de Transacciones.');
-        Registro().mostrarRegistro();
+       registro.mostrarRegistro();
         break;
       case '2':
         print('Ha seleccionado la opción 2: Seguimiento de saldo y Estado Financiero.');
