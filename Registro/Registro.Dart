@@ -5,16 +5,16 @@ class Registro {
   List<String> categorias = [];
   List<String> conceptos = [];
   double saldo = 0;
-
+  double ingresos = 0;
+  double gastos = 0;
   void mostrarRegistro() {
     bool running = true;
 
     while (running) {
       print('Registro de Transacciones:');
       print('1. Ingresar Monto');
-      print('2. Consultar Saldo');
-      print('3. Retirar Dinero');
-      print('4. Salir');
+      print('2. Retirar Dinero');
+      print('3. Salir');
 
       stdout.write('Seleccione una opción: ');
       String input = stdin.readLineSync() ?? '';
@@ -33,17 +33,10 @@ class Registro {
           stdout.write('Ingrese el concepto del ingreso: ');
           String inputConcepto = stdin.readLineSync() ?? '';
           conceptos.add(inputConcepto);
-
+          ingresos += montoIngresado;
           saldo += montoIngresado; 
           break;
         case '2':
-          if (saldo <= 0) {
-            print('No hay montos ingresados todavía.');
-          } else {
-            print('Saldo actual: \$${saldo}');
-          }
-          break;
-        case '3':
           if (saldo <= 0) {
             print('No hay montos ingresados todavía.');
           } else {
@@ -60,6 +53,7 @@ class Registro {
                 conceptos.add(inputConceptoRetiro);
 
                 saldo -= montoRetiro;
+                gastos += montoRetiro;
                 print('Se retiró \$${montoRetiro} correctamente. Concepto: $inputConceptoRetiro');
               } else {
                 print('No hay suficientes fondos para retirar \$${montoRetiro}.');
@@ -67,7 +61,7 @@ class Registro {
             }
           }
           break;
-        case '4':
+        case '3':
           print('Saliendo del registro de transacciones...');
           running = false;
           break;
@@ -76,5 +70,14 @@ class Registro {
       }
     }
   }
+  double getSaldo() {
+  return saldo;
+}
+double getIngresos() {
+  return ingresos;
+}
+double getGastos() {
+  return gastos;
+}
 }
 
