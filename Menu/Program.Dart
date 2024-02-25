@@ -4,9 +4,11 @@ import '../Metas/Metas.dart';
 import '../EstadoFinanciero/Financiero.dart';
 
 void main() {
+  
   bool running = true;
- Registro registro = Registro();
- Financiera financiera = Financiera(registro);  
+  Registro registro = Registro();
+  Financiera financiera = Financiera(registro);  
+  Metas metas = Metas();
 
   while (running) {
     print('Bienvenido al Sistema de Cálculo Financiero:');
@@ -28,7 +30,7 @@ void main() {
         break;
       case '3':
         print('Ha seleccionado la opción 3: Metas.');
-        Metas().mostrarMeta();
+        metas.mostrarMeta();
         break;
       case '4':
         print('Saliendo del programa...');

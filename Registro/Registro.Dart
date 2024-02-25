@@ -1,12 +1,20 @@
 import 'dart:io';
-
+import '../Metas/Metas.dart';
 class Registro {
+
+  Metas meta = Metas();
+
+  List<Map<String, dynamic>> transacciones = [];
+
   List<double> montos = [];
   List<String> categorias = [];
   List<String> conceptos = [];
+
+  bool presupuesto = false;  
   double saldo = 0;
   double ingresos = 0;
   double gastos = 0;
+  
   void mostrarRegistro() {
     bool running = true;
 
@@ -35,6 +43,14 @@ class Registro {
           conceptos.add(inputConcepto);
           ingresos += montoIngresado;
           saldo += montoIngresado; 
+
+          transacciones.add({
+          'tipo': 'Ingreso',
+          'monto': montoIngresado,
+          'categoria': inputCategoria,
+          'concepto': inputConcepto,
+        });
+
           break;
         case '2':
           if (saldo <= 0) {
@@ -46,7 +62,8 @@ class Registro {
             if (montoRetiro <= 0) {
               print('El monto a retirar debe ser mayor que cero.');
             } else {
-              if (saldo >= montoRetiro) {
+              if(!presupuesto){
+                  if (saldo >= montoRetiro) {
                 montos.add(-montoRetiro); 
                 stdout.write('Ingrese el concepto del retiro: ');
                 String inputConceptoRetiro = stdin.readLineSync() ?? '';
@@ -55,9 +72,24 @@ class Registro {
                 saldo -= montoRetiro;
                 gastos += montoRetiro;
                 print('Se retiró \$${montoRetiro} correctamente. Concepto: $inputConceptoRetiro');
+
+                transacciones.add({
+                  'tipo': 'Retiro',
+                  'monto': -montoRetiro,
+                  'concepto': inputConceptoRetiro,
+                });
+
+                if(gastos > meta.presupuestoEstablecido){
+                  print("presupuesto alcazado o excedido");
+                  presupuesto = true;
+                }
               } else {
                 print('No hay suficientes fondos para retirar \$${montoRetiro}.');
               }
+              }else{
+                print("Presupuesto excedido");
+              }
+              
             }
           }
           break;

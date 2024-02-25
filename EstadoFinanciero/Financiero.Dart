@@ -2,8 +2,18 @@ import 'dart:io';
 import '../Registro/Registro.dart';
 
 class Financiera {
+
   Registro registro;
-   Financiera(this.registro);
+  
+  Financiera(this.registro);
+
+  void imprimirTransacciones() {
+    print('Historial de Transacciones:');
+    for (var transaccion in registro.transacciones) {
+      print('Tipo: ${transaccion['tipo']}, Monto: \$${transaccion['monto']}, Categoria: ${transaccion['categoria'] ?? 'N/A'}, Concepto: ${transaccion['concepto']}');
+    }
+  }
+
   void mostrarFinanciero() {
     bool running = true;
 
@@ -32,12 +42,15 @@ class Financiera {
           }
           break;
         case '2':
-          print('Ha seleccionado la opción 2: Retirar.');
+          print('Ha seleccionado la opción 2: Estado financiero.'); 
+          imprimirTransacciones();
           break;
+
         case '3':
           print('Saliendo del registro de transacciones...');
           running = false;
           break;
+
         default:
           print('Opción no válida. Por favor, seleccione una opción válida.');
       }
