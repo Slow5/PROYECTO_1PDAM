@@ -1,7 +1,7 @@
 import 'dart:io';
 import '../Metas/Metas.dart';
-class Registro {
 
+class Registro {
   Metas meta = Metas();
 
   List<Map<String, dynamic>> transacciones = [];
@@ -34,9 +34,13 @@ class Registro {
           double montoIngresado = double.tryParse(inputMonto) ?? 0;
           montos.add(montoIngresado);
 
-          stdout.write('Ingrese la categoría del ingreso: ');
-          String inputCategoria = stdin.readLineSync() ?? '';
-          categorias.add(inputCategoria);
+         stdout.write('Seleccione la categoría del ingreso (alimentacion, transporte, vivienda, entretenimiento): ');
+        String inputCategoria = stdin.readLineSync()?.toLowerCase() ?? '';
+        if (inputCategoria != 'alimentacion' && inputCategoria != 'transporte' && inputCategoria != 'vivienda' && inputCategoria != 'entretenimiento') {
+      print('Categoría no válida. Por favor, seleccione una categoría válida.');
+        continue;
+        }       
+
 
           stdout.write('Ingrese el concepto del ingreso: ');
           String inputConcepto = stdin.readLineSync() ?? '';
@@ -45,11 +49,11 @@ class Registro {
           saldo += montoIngresado; 
 
           transacciones.add({
-          'tipo': 'Ingreso',
-          'monto': montoIngresado,
-          'categoria': inputCategoria,
-          'concepto': inputConcepto,
-        });
+            'tipo': 'Ingreso',
+            'monto': montoIngresado,
+            'categoria': inputCategoria,
+            'concepto': inputConcepto,
+          });
 
           break;
         case '2':
@@ -62,34 +66,33 @@ class Registro {
             if (montoRetiro <= 0) {
               print('El monto a retirar debe ser mayor que cero.');
             } else {
-              if(!presupuesto){
-                  if (saldo >= montoRetiro) {
-                montos.add(-montoRetiro); 
-                stdout.write('Ingrese el concepto del retiro: ');
-                String inputConceptoRetiro = stdin.readLineSync() ?? '';
-                conceptos.add(inputConceptoRetiro);
+              if (!presupuesto) {
+                if (saldo >= montoRetiro) {
+                  montos.add(-montoRetiro); 
+                  stdout.write('Ingrese el concepto del retiro: ');
+                  String inputConceptoRetiro = stdin.readLineSync() ?? '';
+                  conceptos.add(inputConceptoRetiro);
 
-                saldo -= montoRetiro;
-                gastos += montoRetiro;
-                print('Se retiró \$${montoRetiro} correctamente. Concepto: $inputConceptoRetiro');
+                  saldo -= montoRetiro;
+                  gastos += montoRetiro;
+                  print('Se retiró \$${montoRetiro} correctamente. Concepto: $inputConceptoRetiro');
 
-                transacciones.add({
-                  'tipo': 'Retiro',
-                  'monto': -montoRetiro,
-                  'concepto': inputConceptoRetiro,
-                });
+                  transacciones.add({
+                    'tipo': 'Retiro',
+                    'monto': -montoRetiro,
+                    'concepto': inputConceptoRetiro,
+                  });
 
-                if(gastos > meta.presupuestoEstablecido){
-                  print("presupuesto alcazado o excedido");
-                  presupuesto = true;
+                  if (gastos > meta.presupuestoEstablecido) {
+                    print("Presupuesto alcanzado o excedido");
+                    presupuesto = true;
+                  }
+                } else {
+                  print('No hay suficientes fondos para retirar \$${montoRetiro}.');
                 }
               } else {
-                print('No hay suficientes fondos para retirar \$${montoRetiro}.');
-              }
-              }else{
                 print("Presupuesto excedido");
               }
-              
             }
           }
           break;
@@ -102,14 +105,16 @@ class Registro {
       }
     }
   }
+  
   double getSaldo() {
-  return saldo;
+    return saldo;
+  }
+  
+  double getIngresos() {
+    return ingresos;
+  }
+  
+  double getGastos() {
+    return gastos;
+  }
 }
-double getIngresos() {
-  return ingresos;
-}
-double getGastos() {
-  return gastos;
-}
-}
-
