@@ -29,18 +29,24 @@ class Registro {
 
       switch (input) {
         case '1':
-          stdout.write('Ingrese el monto a ingresar: ');
-          String inputMonto = stdin.readLineSync() ?? '';
-          double montoIngresado = double.tryParse(inputMonto) ?? 0;
+          double montoIngresado;
+          do {
+            stdout.write('Ingrese el monto a ingresar: ');
+            String inputMonto = stdin.readLineSync() ?? '';
+            montoIngresado = double.tryParse(inputMonto) ?? 0;
+            if (montoIngresado <= 0) {
+              print('Por favor, ingrese un valor numérico mayor que cero.');
+            }
+          } while (montoIngresado <= 0);
+
           montos.add(montoIngresado);
 
-         stdout.write('Seleccione la categoría del ingreso (alimentacion, transporte, vivienda, entretenimiento): ');
-        String inputCategoria = stdin.readLineSync()?.toLowerCase() ?? '';
-        if (inputCategoria != 'alimentacion' && inputCategoria != 'transporte' && inputCategoria != 'vivienda' && inputCategoria != 'entretenimiento') {
-      print('Categoría no válida. Por favor, seleccione una categoría válida.');
-        continue;
-        }       
-
+          stdout.write('Seleccione la categoría del ingreso (alimentacion, transporte, vivienda, entretenimiento): ');
+          String inputCategoria = stdin.readLineSync()?.toLowerCase() ?? '';
+          if (inputCategoria != 'alimentacion' && inputCategoria != 'transporte' && inputCategoria != 'vivienda' && inputCategoria != 'entretenimiento') {
+            print('Categoría no válida. Por favor, seleccione una categoría válida.');
+            continue;
+          }       
 
           stdout.write('Ingrese el concepto del ingreso: ');
           String inputConcepto = stdin.readLineSync() ?? '';
@@ -79,7 +85,7 @@ class Registro {
 
                   transacciones.add({
                     'tipo': 'Retiro',
-                    'monto': -montoRetiro,
+                    'monto': montoRetiro,
                     'concepto': inputConceptoRetiro,
                   });
 
